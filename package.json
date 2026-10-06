@@ -1,0 +1,16 @@
+{
+  "devDependencies": {
+    "cheerio": "^1.2.0",
+    "puppeteer-core": "^25.12.0"
+  },
+  "name": "krasne-rasy-liberec",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Трёхязычный лендинг лэшмейкера в Либерце",
+  "scripts": {
+    "build": "node build.mjs",
+    "serve": "python -m http.server 8080",
+    "check": "node check-responsive.mjs"
+  }
+}

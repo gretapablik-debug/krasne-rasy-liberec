@@ -8,7 +8,7 @@
   --ink: #2B2B2B;
   --body: #4A3A35;
   --muted: #7A5E54;
-  --muted-2: #8A6A5E;
+  --muted-2: #86665A;   /* 4.62:1 on the cream ground; #8A6A5E missed 4.5 */
   --gold: #C9A86A;
   --gold-dark: #8C6A2E;
   --gold-mid: #A9884A;
@@ -94,6 +94,9 @@ h2 { font-size: clamp(34px, 5vw, 48px); }
 }
 
 .logo {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
   text-decoration: none;
   font-family: var(--serif);
   font-size: 26px;
@@ -109,9 +112,23 @@ h2 { font-size: clamp(34px, 5vw, 48px); }
   font-size: 14px;
   letter-spacing: 0.04em;
 }
-.nav-links a { text-decoration: none; color: var(--brown); }
+.nav-links a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  text-decoration: none;
+  color: var(--brown);
+}
 
-.header-actions { display: flex; align-items: center; gap: 8px; }
+/* Below roughly 300px the two icons and the language group no longer fit on
+   one line next to the logo, so the group is allowed to break. */
+.header-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 8px;
+}
 
 .icon-btn {
   width: 44px;
@@ -133,21 +150,32 @@ h2 { font-size: clamp(34px, 5vw, 48px); }
   background: var(--white);
 }
 
-.lang button {
+.lang a {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   min-width: 44px;
   min-height: 36px;
   padding: 0 12px;
-  border: 0;
   border-radius: 999px;
   font-family: var(--sans);
   font-size: 13px;
   font-weight: 600;
   letter-spacing: 0.06em;
-  cursor: pointer;
+  text-decoration: none;
   background: transparent;
   color: var(--brown);
 }
-.lang button[aria-pressed="true"] { background: var(--brown); color: var(--white); }
+.lang a[aria-current="page"] { background: var(--brown); color: var(--white); }
+
+/* The pill stays 36px for the look of the header; the hit area reaches the
+   44px minimum through the padding of its own container. */
+.lang a::before {
+  content: "";
+  position: absolute;
+  inset: -4px 0;
+}
 
 /* --- hero --- */
 
@@ -289,7 +317,7 @@ h2 { font-size: clamp(34px, 5vw, 48px); }
 .free__word {
   font-family: var(--serif);
   font-weight: 600;
-  font-size: 30px;
+  font-size: clamp(20px, 6.5vw, 30px);
   letter-spacing: 0.06em;
   color: var(--brown);
 }
@@ -389,29 +417,6 @@ h2 { font-size: clamp(34px, 5vw, 48px); }
   object-fit: cover;
   object-position: 50% 55%;
 }
-.work__tag {
-  position: absolute;
-  top: 12px;
-  left: 12px;
-  padding: 5px 11px;
-  border-radius: 999px;
-  background: rgba(90, 62, 54, 0.88);
-  color: var(--white);
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-}
-.work__name {
-  position: absolute;
-  left: 12px;
-  bottom: 12px;
-  padding: 6px 14px;
-  border-radius: 999px;
-  background: var(--white);
-  color: var(--brown);
-  font-size: 13px;
-  font-weight: 600;
-}
 
 /* --- reviews --- */
 
@@ -432,18 +437,6 @@ h2 { font-size: clamp(34px, 5vw, 48px); }
   aspect-ratio: 9 / 16;
   object-fit: cover;
   object-position: top;
-}
-.review__label {
-  position: absolute;
-  top: 12px;
-  left: 12px;
-  padding: 6px 12px;
-  border-radius: 999px;
-  background: var(--brown);
-  color: var(--white);
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.04em;
 }
 
 /* --- faq --- */
@@ -526,6 +519,7 @@ h2 { font-size: clamp(34px, 5vw, 48px); }
 }
 .mbar a {
   flex: 1 1 0;
+  min-width: 0;
   min-height: 52px;
   border-radius: 14px;
   text-decoration: none;
@@ -534,8 +528,9 @@ h2 { font-size: clamp(34px, 5vw, 48px); }
   align-items: center;
   justify-content: center;
   gap: 2px;
-  font-size: 12px;
+  font-size: clamp(10px, 3.1vw, 12px);
   font-weight: 600;
+  text-align: center;
 }
 .mbar a.is-outline { border: 1px solid var(--brown); color: var(--brown); }
 .mbar a.is-solid { flex: 1.4 1 0; background: var(--brown); color: var(--white); }
@@ -543,6 +538,10 @@ h2 { font-size: clamp(34px, 5vw, 48px); }
 @media (max-width: 720px) {
   .nav-links { display: none; }
   .mbar { display: flex; }
+  /* The fixed bar at the bottom already offers calling and Instagram, so the
+     header icons are a duplicate here — dropping them keeps the logo and the
+     language switcher on one line. */
+  .header-actions .icon-btn { display: none; }
   body { padding-bottom: 88px; }
   .hero-ctas a { flex: 1 1 100%; justify-content: center; }
 }
@@ -550,20 +549,31 @@ h2 { font-size: clamp(34px, 5vw, 48px); }
 /* ======================================================================
    Motion
    ----------------------------------------------------------------------
-   Only `opacity` and `transform` are animated: both are handled by the
-   compositor, so frames are cheap enough to keep up with a 120 Hz screen.
-   Durations are long (0.9-1.4s) on a soft ease-out curve.
+   One curve and one rhythm across the page, with the direction of entry
+   following the layout: a column on the left arrives from the left, the
+   photo beside it from the right. Everything animates `opacity` and
+   `transform` only — both are handled by the compositor, so frames are
+   cheap enough to hold 120 Hz on a high-refresh screen. Nothing here
+   touches layout, colour or filters, which would force work back onto the
+   main thread.
 
    The hidden-before-reveal state is scoped to `.anim`, a class an inline
    script in <head> adds. Without JavaScript the class never lands and the
    page renders fully visible, with nothing to un-hide.
 
-   This selector list mirrors REVEAL_SELECTOR in app.js — change both.
+   The selector list below mirrors REVEAL_SELECTOR in app.js — change both.
    ====================================================================== */
+
+:root {
+  --ease-out-soft: cubic-bezier(0.16, 1, 0.3, 1);
+  --dur-quick: 950ms;
+  --dur-base: 1250ms;
+  --dur-slow: 1550ms;
+}
 
 .anim .hero-copy > *,
 .anim .hero-frame,
-.anim .head-center,
+.anim .head-center > *,
 .anim .section > h2,
 .anim .wrap-820 > h2,
 .anim .price-row,
@@ -580,28 +590,54 @@ h2 { font-size: clamp(34px, 5vw, 48px); }
 .anim .contact-link,
 .anim .footer {
   opacity: 0;
-  transform: translate3d(0, 32px, 0);
+  transform: translate3d(0, 34px, 0);
   transition:
-    opacity 1200ms cubic-bezier(0.16, 1, 0.3, 1) var(--reveal-delay, 0ms),
-    transform 1200ms cubic-bezier(0.16, 1, 0.3, 1) var(--reveal-delay, 0ms);
+    opacity var(--dur-base) var(--ease-out-soft) var(--reveal-delay, 0ms),
+    transform var(--dur-base) var(--ease-out-soft) var(--reveal-delay, 0ms);
   will-change: opacity, transform;
 }
 
-/* Media rises a touch further and settles slower than the copy beside it. */
-.anim .hero-frame,
-.anim .about__media,
+/* --- direction follows the layout ------------------------------------ */
+
+/* Text columns drift in from their own side of the page. */
+.anim .hero-copy > *,
+.anim .contact__copy > * { transform: translate3d(-30px, 12px, 0); }
+
+.anim .about__copy > *,
+.anim .contact-link { transform: translate3d(30px, 12px, 0); }
+
+/* Photography is heavier: it travels further, settles out of a slight
+   zoom, and takes the longest of the three durations. */
+.anim .hero-frame {
+  transform: translate3d(38px, 28px, 0) scale(0.94);
+  transition-duration: var(--dur-slow);
+}
+.anim .about__media {
+  transform: translate3d(-38px, 28px, 0) scale(0.94);
+  transition-duration: var(--dur-slow);
+}
 .anim .work,
 .anim .review {
-  transform: translate3d(0, 40px, 0) scale(0.965);
-  transition-duration: 1400ms;
+  transform: translate3d(0, 48px, 0) scale(0.94);
+  transition-duration: var(--dur-slow);
 }
 
-/* Price rows read as a list unrolling, so they travel a shorter distance. */
+/* Cards lift as a group, with a touch of scale so the row has depth. */
+.anim .card,
+.anim .step {
+  transform: translate3d(0, 44px, 0) scale(0.96);
+  transition-duration: var(--dur-base);
+}
+
+/* Rows read as a list unrolling, so they travel a shorter distance. */
 .anim .price-row,
 .anim .faq-item {
   transform: translate3d(0, 18px, 0);
-  transition-duration: 950ms;
+  transition-duration: var(--dur-quick);
 }
+
+.anim .free { transform: translate3d(0, 26px, 0) scale(0.98); }
+.anim .footer { transform: translate3d(0, 20px, 0); }
 
 .anim .is-visible {
   opacity: 1;
@@ -609,17 +645,64 @@ h2 { font-size: clamp(34px, 5vw, 48px); }
   will-change: auto;
 }
 
-/* --- hover and press ------------------------------------------------- */
+/* --- headings rise out from behind their own box --------------------- */
+
+/* The heading is the mask and the inner span is what moves. The padding
+   and the matching negative margin give diacritics and descenders room
+   without shifting the layout — Czech `r` with a hacek and `u` with a ring
+   sit above cap height and would otherwise be shaved off mid-animation. */
+.anim h1,
+.anim h2 {
+  overflow: hidden;
+  padding: 0.12em 0 0.2em;
+  margin-top: -0.12em;
+  margin-bottom: -0.2em;
+  opacity: 1;
+  transform: none;
+}
+
+.anim h1 .rise,
+.anim h2 .rise {
+  display: block;
+  opacity: 0;
+  transform: translate3d(0, 115%, 0);
+  transition:
+    opacity var(--dur-quick) var(--ease-out-soft) var(--reveal-delay, 0ms),
+    transform var(--dur-slow) var(--ease-out-soft) var(--reveal-delay, 0ms);
+}
+
+/* Triggered whether the heading is the observed element or sits inside one. */
+.anim .is-visible .rise,
+.anim .is-visible.rise { opacity: 1; transform: translate3d(0, 0, 0); }
+
+/* --- the frame around the page --------------------------------------- */
+
+.anim .header { animation: drop-in var(--dur-base) var(--ease-out-soft) both; }
+.anim .mbar { animation: bar-up var(--dur-base) 300ms var(--ease-out-soft) both; }
+
+@keyframes drop-in {
+  from { opacity: 0; transform: translate3d(0, -18px, 0); }
+  to { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+
+@keyframes bar-up {
+  from { opacity: 0; transform: translate3d(0, 100%, 0); }
+  to { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+
+/* --- hover and press -------------------------------------------------- */
 
 .btn,
 .card,
 .step,
 .contact-link,
 .fact,
-.icon-btn {
+.icon-btn,
+.work,
+.review {
   transition:
-    transform 700ms cubic-bezier(0.16, 1, 0.3, 1),
-    box-shadow 700ms cubic-bezier(0.16, 1, 0.3, 1),
+    transform 700ms var(--ease-out-soft),
+    box-shadow 700ms var(--ease-out-soft),
     background-color 500ms ease,
     border-color 500ms ease,
     color 500ms ease;
@@ -641,40 +724,74 @@ h2 { font-size: clamp(34px, 5vw, 48px); }
   box-shadow: 0 20px 38px rgba(90, 62, 54, 0.13);
 }
 
+/* The galleries lift as a whole: their images are busy drifting with the
+   scroll, so a hover zoom would fight the parallax below. */
+.work:hover,
+.review:hover {
+  transform: translate3d(0, -5px, 0);
+  box-shadow: 0 24px 44px rgba(90, 62, 54, 0.16);
+}
+
 .fact:hover { transform: translate3d(0, -2px, 0); background: var(--blush); }
 
+.about__img { transition: transform 1600ms var(--ease-out-soft); }
+.about__img:hover { transform: scale(1.03); }
+
 .nav-links a,
-.lang button {
+.lang a {
   transition: color 500ms ease, background-color 600ms ease, opacity 500ms ease;
 }
-.nav-links a:hover { opacity: 0.72; }
 
-/* The crop drifts in slowly under a steady frame. */
-.work img,
-.review img,
-.about__img {
-  transition: transform 1600ms cubic-bezier(0.16, 1, 0.3, 1);
+.nav-links a { position: relative; }
+.nav-links a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 8px;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: right center;
+  transition: transform 700ms var(--ease-out-soft);
 }
-.work:hover img,
-.review:hover img { transform: scale(1.05); }
-.about__img:hover { transform: scale(1.03); }
+.nav-links a:hover::after { transform: scaleX(1); transform-origin: left center; }
 
 .faq-item summary { transition: color 500ms ease; }
 .faq-item:hover summary { color: var(--brown); }
 
-/* --- language crossfade ---------------------------------------------- */
+/* The box height still snaps open — only the answer can be animated
+   without putting layout work on every frame. */
+.faq-item[open] > p { animation: answer-in 620ms var(--ease-out-soft) both; }
 
-body > section,
-.footer,
-.nav-links,
-.mbar { transition: opacity 420ms ease; }
+@keyframes answer-in {
+  from { opacity: 0; transform: translate3d(0, -10px, 0); }
+  to { opacity: 1; transform: translate3d(0, 0, 0); }
+}
 
-html.is-switching body > section,
-html.is-switching .footer,
-html.is-switching .nav-links,
-html.is-switching .mbar { opacity: 0.22; }
+/* --- scroll-linked parallax ------------------------------------------- */
 
-/* --- opt out --------------------------------------------------------- */
+/* Where the browser supports it, the gallery crops drift against the scroll
+   on the compositor thread — no scroll listener, no main-thread work, so it
+   stays smooth at any refresh rate. Elsewhere the images simply sit still.
+   The 1.08 zoom hides the edges the drift would otherwise expose. */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .work img,
+    .review img {
+      animation: crop-drift linear both;
+      animation-timeline: view();
+      animation-range: entry 0% exit 100%;
+    }
+
+    @keyframes crop-drift {
+      from { transform: translate3d(0, -3.2%, 0) scale(1.08); }
+      to { transform: translate3d(0, 3.2%, 0) scale(1.08); }
+    }
+  }
+}
+
+/* --- opt out ---------------------------------------------------------- */
 
 @media (prefers-reduced-motion: reduce) {
   html, html.anim { scroll-behavior: auto; }
@@ -690,9 +807,9 @@ html.is-switching .mbar { opacity: 0.22; }
 
   .anim .hero-copy > *,
   .anim .hero-frame,
-  .anim .head-center,
+  .anim .head-center > *,
   .anim .section > h2,
-.anim .wrap-820 > h2,
+  .anim .wrap-820 > h2,
   .anim .price-row,
   .anim .extras,
   .anim .free,
@@ -705,8 +822,13 @@ html.is-switching .mbar { opacity: 0.22; }
   .anim .faq-item,
   .anim .contact__copy > *,
   .anim .contact-link,
-  .anim .footer {
+  .anim .footer,
+  .anim h1 .rise,
+  .anim h2 .rise {
     opacity: 1;
     transform: none;
   }
+
+  .anim h1,
+  .anim h2 { overflow: visible; }
 }

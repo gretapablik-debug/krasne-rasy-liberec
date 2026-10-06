@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>https://krasnerasy.online/</loc>
+    <lastmod>2026-10-06</lastmod>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://krasnerasy.online/"/>
+    <xhtml:link rel="alternate" hreflang="uk" href="https://krasnerasy.online/uk/"/>
+    <xhtml:link rel="alternate" hreflang="cs" href="https://krasnerasy.online/cs/"/>
+  </url>
+  <url>
+    <loc>https://krasnerasy.online/uk/</loc>
+    <lastmod>2026-10-06</lastmod>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://krasnerasy.online/"/>
+    <xhtml:link rel="alternate" hreflang="uk" href="https://krasnerasy.online/uk/"/>
+    <xhtml:link rel="alternate" hreflang="cs" href="https://krasnerasy.online/cs/"/>
+  </url>
+  <url>
+    <loc>https://krasnerasy.online/cs/</loc>
+    <lastmod>2026-10-06</lastmod>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://krasnerasy.online/"/>
+    <xhtml:link rel="alternate" hreflang="uk" href="https://krasnerasy.online/uk/"/>
+    <xhtml:link rel="alternate" hreflang="cs" href="https://krasnerasy.online/cs/"/>
+  </url>
+</urlset>
