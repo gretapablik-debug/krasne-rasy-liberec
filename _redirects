@@ -1,0 +1,4 @@
+# Pages did not pick up 404.html implicitly on this project — a missing path
+# came back with the right status but an empty body. This states it outright.
+# Static assets are matched before these rules, so nothing real is shadowed.
+/*    /404.html    404
