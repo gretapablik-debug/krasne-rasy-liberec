@@ -1,0 +1,19 @@
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: geolocation=(), microphone=(), camera=()
+
+# Images and the icon rarely change; filenames are stable, so keep the window
+# short enough that a replaced photo still reaches visitors within a month.
+/assets/*.webp
+  Cache-Control: public, max-age=2592000
+
+/assets/*.svg
+  Cache-Control: public, max-age=2592000
+
+# Styles and scripts get edited far more often than the photos.
+/assets/*.css
+  Cache-Control: public, max-age=3600, must-revalidate
+
+/assets/*.js
+  Cache-Control: public, max-age=3600, must-revalidate
