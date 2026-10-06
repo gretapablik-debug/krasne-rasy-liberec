@@ -10,7 +10,7 @@
   "description": "Трёхязычный лендинг лэшмейкера в Либерце",
   "scripts": {
     "build": "node build.mjs",
-    "serve": "python -m http.server 8080",
-    "check": "node check-responsive.mjs"
+    "check": "node check-responsive.mjs",
+    "serve": "python -m http.server 8080 --directory .."
   }
 }

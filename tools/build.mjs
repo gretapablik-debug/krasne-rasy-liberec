@@ -15,9 +15,12 @@ import { fileURLToPath } from 'node:url';
 
 import * as cheerio from 'cheerio';
 
-import { I18N } from './src/i18n.js';
+import { I18N } from '../src/i18n.js';
 
-const ROOT = dirname(fileURLToPath(import.meta.url));
+// The tooling lives in tools/ so the repository root stays plain static
+// files: Cloudflare Pages treats a root package.json as a Node project and
+// tries to install and build, which is neither needed nor wanted here.
+const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const ORIGIN = 'https://krasnerasy.online';
 
 const PHONE = '+420792931153';
