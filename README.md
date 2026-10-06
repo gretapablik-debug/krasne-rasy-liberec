@@ -65,18 +65,11 @@ python -m http.server 8080
 npx wrangler pages deploy . --project-name krasne-rasy-liberec
 ```
 
-## После привязки домена
+## Домен
 
-Домена на момент сборки не было, поэтому в разметке нет абсолютных ссылок.
-Когда домен появится, добавьте в `<head>`:
-
-```html
-<link rel="canonical" href="https://ваш-домен/">
-<meta property="og:url" content="https://ваш-домен/">
-```
-
-и замените `og:image` на абсолютный адрес `https://ваш-домен/assets/hero.webp` —
-соцсети не всегда разворачивают относительный путь до превью.
+Сайт живёт на https://krasnerasy.online — адрес прописан в `canonical`,
+`og:url` и `og:image`. При переезде на другой домен замените все три в
+`<head>` файла `index.html`.
 
 ## Контакты на странице
 
